@@ -1,0 +1,22 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
+
+#pragma once
+
+#include "Modules/ModuleManager.h"
+
+class FCustomLogModule : public IModuleInterface
+{
+public:
+
+	/** IModuleInterface implementation */
+	virtual void StartupModule() override;
+	virtual void ShutdownModule() override;
+};
+
+#define CALLED_FROM (TEXT(__FUNCTION__) + FString::Printf(TEXT("(%d)"), __LINE__))
+#define CUSTOM_LOG(Verbosity, Format, ...) UE_LOG(LogTemp, Verbosity, TEXT("%s %s"), *CALLED_FROM, *FString::Printf(Format, ##__VA_ARGS__))
+#define CUSTOM_LOG_SCREEN(LifeTime, Color, Format, ...) GEngine->AddOnScreenDebugMessage(-1, LifeTime, Color, FString::Printf(Format, ##__VA_ARGS__))
+
+#define TRACE(Format, ...) CUSTOM_LOG(Log, Format, ##__VA_ARGS__) CUSTOM_LOG_SCREEN(4.0f, FColor::Green, Format, ##__VA_ARGS__)
+#define TRACE_WARNING(Format, ...) CUSTOM_LOG(Warning, Format, ##__VA_ARGS__) CUSTOM_LOG_SCREEN(4.0f, FColor::Yellow, Format, ##__VA_ARGS__)
+#define TRACE_ERROR(Format, ...) CUSTOM_LOG(Error, Format, ##__VA_ARGS__) CUSTOM_LOG_SCREEN(4.0f, FColor::Red, Format, ##__VA_ARGS__)
