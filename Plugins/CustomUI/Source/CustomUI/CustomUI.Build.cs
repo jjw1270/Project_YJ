@@ -39,7 +39,7 @@ public class CustomUI : ModuleRules
 				"Slate",
 				"SlateCore",
                 "UMG",
-				"CustomLog"
+				"CommonLibrary"
 				// ... add private dependencies that you statically link with here ...	
 			}
             );

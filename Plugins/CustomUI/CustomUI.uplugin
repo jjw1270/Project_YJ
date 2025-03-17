@@ -23,7 +23,7 @@
 	],
 	"Plugins": [
 		{
-			"Name": "CustomLog",
+			"Name": "CommonLibrary",
 			"Enabled": true
 		}
 	]

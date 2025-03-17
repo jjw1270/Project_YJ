@@ -2,7 +2,7 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
-	"FriendlyName": "CustomLog",
+	"FriendlyName": "CommonLibrary",
 	"Description": "",
 	"Category": "Other",
 	"CreatedBy": "",
@@ -16,7 +16,7 @@
 	"Installed": false,
 	"Modules": [
 		{
-			"Name": "CustomLog",
+			"Name": "CommonLibrary",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}

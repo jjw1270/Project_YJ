@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class CustomLog : ModuleRules
+public class CommonLibrary : ModuleRules
 {
-	public CustomLog(ReadOnlyTargetRules Target) : base(Target)
+	public CommonLibrary(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		

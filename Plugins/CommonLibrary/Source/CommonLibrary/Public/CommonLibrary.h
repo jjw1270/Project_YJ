@@ -3,9 +3,9 @@
 #pragma once
 
 #include "Modules/ModuleManager.h"
-#include "CommonLibrary.h"
+#include "LogDefines.h"
 
-class FCustomUIModule : public IModuleInterface
+class FCommonLibraryModule : public IModuleInterface
 {
 public:
 
