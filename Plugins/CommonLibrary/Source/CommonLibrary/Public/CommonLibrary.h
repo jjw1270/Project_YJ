@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Modules/ModuleManager.h"
-#include "LogDefines.h"
+#include "Utils.h"
 
 class FCommonLibraryModule : public IModuleInterface
 {
