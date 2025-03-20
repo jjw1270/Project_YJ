@@ -62,6 +62,12 @@ private:
 	UPROPERTY()
 	TObjectPtr<UWidgetAnimation> _CurrentStateAnim = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	TObjectPtr<USoundBase> OnShowSound = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	TObjectPtr<USoundBase> OnHideSound = nullptr;
+
 private:
 	EWidgetState _WidgetState = EWidgetState::Hide;
 

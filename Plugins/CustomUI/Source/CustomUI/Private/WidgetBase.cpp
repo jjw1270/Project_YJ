@@ -99,6 +99,7 @@ void UWidgetBase::OnStateChanged_Implementation(EWidgetState _old_state)
 	case EWidgetState::OnShow:
 		SetRenderOpacity(1.0f);
 		anim_to_play = OnShowAnim;
+		PlaySound(OnShowSound);
 		break;
 	case EWidgetState::Idle:
 		anim_to_play = IdleAnim;
@@ -106,6 +107,7 @@ void UWidgetBase::OnStateChanged_Implementation(EWidgetState _old_state)
 		break;
 	case EWidgetState::OnHide:
 		anim_to_play = OnHideAnim;
+		PlaySound(OnHideSound);
 		break;
 	default:
 		break;

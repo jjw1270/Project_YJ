@@ -10,7 +10,8 @@ public class ProjectYJ : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput",
 															"CommonLibrary", "CustomUI",
-		});
+															"GameplayAbilities", "GameplayTags", "GameplayTasks",
+        });
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore", "UMG" });
 		
