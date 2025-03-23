@@ -2,7 +2,7 @@
 
 
 #include "Player/BasePlayerState.h"
-#include "GameplayAbilities/Public/AbilitySystemComponent.h"
+#include "AbilitySystemComponent.h"
 
 ABasePlayerState::ABasePlayerState(const FObjectInitializer& _object_initializer)
 	:Super(_object_initializer)

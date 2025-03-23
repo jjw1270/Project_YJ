@@ -3,11 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CommonLibrary.h"
 #include "GameFramework/Character.h"
+#include "AbilitySystemInterface.h"
+#include "Input/InputDefines.h"
 #include "BaseCharacter.generated.h"
 
+class UInputAction;
+
 UCLASS()
-class PROJECTYJ_API ABaseCharacter : public ACharacter
+class PROJECTYJ_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -18,21 +23,22 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UCameraComponent> _CameraComp = nullptr;
 
-	UPROPERTY()
-	TObjectPtr<class UAbilitySystemComponent> _AbilitySystemComp = nullptr;
+protected:
+	TWeakObjectPtr<class UAbilitySystemComponent> _AbilitySystemComp = nullptr;
+
+protected:
+	UPROPERTY(EditAnywhere, Category = GAS)
+	TMap<EAbilityInputID, TSubclassOf<class UGameplayAbility>> _DefaultInputAbilityMap;
 
 public:
-	ABaseCharacter(const FObjectInitializer& _object_initializer = FObjectInitializer::Get());
+	ABaseCharacter(const FObjectInitializer& _object_initializer);
 
 protected:
 	virtual void BeginPlay() override;
 
-public:	
-	virtual void PossessedBy(AController* _new_controller) override;
-	virtual void OnRep_PlayerState() override;
-
+public:
 	virtual void Tick(float _delta) override;
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* _player_input_comp) override;
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const final;
 
 };

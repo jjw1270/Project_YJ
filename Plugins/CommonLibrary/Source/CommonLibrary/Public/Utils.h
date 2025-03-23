@@ -22,7 +22,19 @@
 
 #pragma endregion
 
+template <typename T>
+FORCEINLINE bool IsValid(const TWeakObjectPtr<T>& _weak_obj_ptr)
+{
+	return _weak_obj_ptr.IsValid();
+}
+
 FORCEINLINE bool IsInvalid(const UObject* _obj)
 {
 	return !IsValid(_obj);
+}
+
+template <typename T>
+FORCEINLINE bool IsInvalid(const TWeakObjectPtr<T>& _weak_obj_ptr)
+{
+	return !IsValid(_weak_obj_ptr);
 }

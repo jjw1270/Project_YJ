@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
+#include "AbilitySystemInterface.h"
 #include "BasePlayerState.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECTYJ_API ABasePlayerState : public APlayerState
+class PROJECTYJ_API ABasePlayerState : public APlayerState, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
