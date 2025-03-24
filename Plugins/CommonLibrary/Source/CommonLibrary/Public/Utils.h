@@ -28,6 +28,23 @@ FORCEINLINE bool IsValid(const TWeakObjectPtr<T>& _weak_obj_ptr)
 	return _weak_obj_ptr.IsValid();
 }
 
+template <typename T>
+FORCEINLINE bool IsValid(const TObjectPtr<T>* _obj_ptr)
+{
+	return _obj_ptr != nullptr;
+}
+
+FORCEINLINE bool IsAllValid()
+{
+	return true;
+}
+
+template <typename... Args>
+FORCEINLINE bool IsAllValid(const UObject* _obj, Args... _rest)
+{
+	return IsValid(_obj) && IsAllValid(_rest...);
+}
+
 FORCEINLINE bool IsInvalid(const UObject* _obj)
 {
 	return !IsValid(_obj);
@@ -37,4 +54,15 @@ template <typename T>
 FORCEINLINE bool IsInvalid(const TWeakObjectPtr<T>& _weak_obj_ptr)
 {
 	return !IsValid(_weak_obj_ptr);
+}
+
+FORCEINLINE bool IsAnyInvalid()
+{
+	return false;
+}
+
+template <typename... Args>
+FORCEINLINE bool IsAnyInvalid(const UObject* _obj, Args... _rest)
+{
+	return IsInvalid(_obj) || IsAnyInvalid(_rest...);
 }

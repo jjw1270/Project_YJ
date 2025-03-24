@@ -19,14 +19,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<class UInputMappingContext> _DefaultMappingContext = nullptr;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	TObjectPtr<UInputAction> _MoveAction = nullptr;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	TObjectPtr<UInputAction> _LookAction = nullptr;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	TObjectPtr<UInputAction> _JumpAction = nullptr;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	TObjectPtr<UInputActionData> _InputActionData = nullptr;
 
 public:
 	APlayableCharacter(const FObjectInitializer& _object_initializer);
@@ -37,7 +31,7 @@ public:
 	virtual void OnRep_PlayerState() override;
 
 protected:
-	void SendAbilityLocalInput(bool _is_pressed, EAbilityInputID _input_type);
+	void SendAbilityLocalInput(bool _is_pressed, EAbilityInputActionID _ability_input_id);
 
 	void Move(const FInputActionValue& _value);
 	void Look(const FInputActionValue& _value);

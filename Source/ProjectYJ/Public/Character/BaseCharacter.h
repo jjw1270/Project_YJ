@@ -28,7 +28,7 @@ protected:
 
 protected:
 	UPROPERTY(EditAnywhere, Category = GAS)
-	TMap<EAbilityInputID, TSubclassOf<class UGameplayAbility>> _DefaultInputAbilityMap;
+	TMap<EAbilityInputActionID, TSubclassOf<class UGameplayAbility>> _DefaultInputAbilityMap;
 
 public:
 	ABaseCharacter(const FObjectInitializer& _object_initializer);

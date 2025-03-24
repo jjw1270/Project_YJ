@@ -4,6 +4,7 @@
 #include "Character/Playable/PlayableCharacter.h"
 #include "Player/BasePlayerState.h"
 #include "AbilitySystemComponent.h"
+#include "Input/ShrimpoInputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -38,31 +39,23 @@ APlayableCharacter::APlayableCharacter(const FObjectInitializer& _object_initial
 	auto mesh_comp = GetMesh();
 	if (IsValid(mesh_comp))
 	{
-		mesh_comp->SetRelativeRotation(FRotator(0.0f, 0.0f, -90.0f));
+		mesh_comp->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
 	}
+
+	OverrideInputComponentClass = UShrimpoInputComponent::StaticClass();
 }
 
 void APlayableCharacter::SetupPlayerInputComponent(UInputComponent* _player_input_comp)
 {
 	Super::SetupPlayerInputComponent(_player_input_comp);
 
-	auto enhanced_input_comp = Cast<UEnhancedInputComponent>(_player_input_comp);
-	if (IsValid(enhanced_input_comp))
+	auto input_comp = Cast<UShrimpoInputComponent>(_player_input_comp);
+	if (IsAllValid(input_comp, _InputActionData))
 	{
-		// Non Ability Input
-		enhanced_input_comp->BindAction(_LookAction, ETriggerEvent::Triggered, this, &APlayableCharacter::Look);
+		input_comp->BindNativeAction(_InputActionData, ENativeInputActionID::Move, ETriggerEvent::Triggered, this, &APlayableCharacter::Move);
+		input_comp->BindNativeAction(_InputActionData, ENativeInputActionID::Look, ETriggerEvent::Triggered, this, &APlayableCharacter::Look);
 		
-		auto bind_asc_action = [&](UInputAction* _action, EAbilityInputID _ability_id)
-		{
-			if (IsValid(_action))
-			{
-				enhanced_input_comp->BindAction(_action, ETriggerEvent::Started, this, &APlayableCharacter::SendAbilityLocalInput, true, _ability_id);
-				enhanced_input_comp->BindAction(_action, ETriggerEvent::Completed, this, &APlayableCharacter::SendAbilityLocalInput, false, _ability_id);
-			}
-		};
-
-		bind_asc_action(_JumpAction, EAbilityInputID::Jump);
-		enhanced_input_comp->BindAction(_MoveAction, ETriggerEvent::Triggered, this, &APlayableCharacter::Move);
+		input_comp->BindAbilityAction(_InputActionData, EAbilityInputActionID::Jump, this, &APlayableCharacter::SendAbilityLocalInput);
 	}
 }
 
@@ -118,18 +111,18 @@ void APlayableCharacter::OnRep_PlayerState()
 	}
 }
 
-void APlayableCharacter::SendAbilityLocalInput(bool _is_pressed, EAbilityInputID _input_id)
+void APlayableCharacter::SendAbilityLocalInput(bool _is_pressed, EAbilityInputActionID _ability_input_id)
 {
 	if (IsInvalid(_AbilitySystemComp))
 		return;
 
 	if (_is_pressed)
 	{
-		_AbilitySystemComp->AbilityLocalInputPressed((int32)_input_id);
+		_AbilitySystemComp->AbilityLocalInputPressed((int32)_ability_input_id);
 	}
 	else
 	{
-		_AbilitySystemComp->AbilityLocalInputReleased((int32)_input_id);
+		_AbilitySystemComp->AbilityLocalInputReleased((int32)_ability_input_id);
 	}
 }
 
