@@ -17,4 +17,6 @@ class PROJECTYJ_API ABasePlayerController : public APlayerController
 protected:
 	virtual void BeginPlay() override;
 
+public:
+	class UAbilitySystemComponent* GetAbilitySystemComponent() const;
 };

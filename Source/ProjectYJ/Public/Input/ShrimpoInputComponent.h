@@ -12,12 +12,12 @@ class UShrimpoInputComponent : public UEnhancedInputComponent
 
 public:
 	template<typename UserClass, typename FuncType>
-	void BindNativeAction(UInputActionData* _data, ENativeInputActionID _native_input_id, ETriggerEvent _trigger_event, UserClass* _obj, FuncType _func)
+	void BindNativeAction(UInputActionData* _data, const FGameplayTag& _tag, ETriggerEvent _trigger_event, UserClass* _obj, FuncType _func)
 	{
 		if (IsAnyInvalid(_data, _obj))
 			return;
 
-		auto input_action = _data->FindNativeInputAction(_native_input_id);
+		auto input_action = _data->FindNativeInputAction(_tag);
 		if (IsInvalid(input_action))
 			return;
 
@@ -28,19 +28,36 @@ public:
 	}
 
 	template<typename UserClass, typename FuncType>
-	void BindAbilityAction(UInputActionData* _data, EAbilityInputActionID _ability_input_id, UserClass* _obj, FuncType _func)
+	void BindAbilityAction(UInputActionData* _data, const FGameplayTag& _tag, UserClass* _obj, FuncType _func)
 	{
 		if (IsAnyInvalid(_data, _obj))
 			return;
 
-		auto input_action = _data->FindAbilityInputAction(_ability_input_id);
+		auto input_action = _data->FindAbilityInputAction(_tag);
 		if (IsInvalid(input_action))
 			return;
 
 		if (_func)
 		{
-			BindAction(input_action, ETriggerEvent::Started, _obj, _func, true, _ability_input_id);
-			BindAction(input_action, ETriggerEvent::Completed, _obj, _func, false, _ability_input_id);
+			BindActionValueLambda(input_action, ETriggerEvent::Started, 
+				[Obj(_obj), Func(_func), Tag(_tag)](const FInputActionValue& Value)
+				{
+					if (IsValid(Obj) && Func != nullptr && Tag.IsValid())
+					{
+						(Obj->*Func)(true, Tag);
+					}
+				}
+			);
+
+			BindActionValueLambda(input_action, ETriggerEvent::Completed,
+				[Obj(_obj), Func(_func), Tag(_tag)](const FInputActionValue& Value)
+				{
+					if (IsValid(Obj) && Func != nullptr && Tag.IsValid())
+					{
+						(Obj->*Func)(false, Tag);
+					}
+				}
+			);
 		}
 	}
 };

@@ -3,6 +3,8 @@
 
 #include "Character/BaseCharacter.h"
 #include "AbilitySystemComponent.h"
+#include "ShrimpoGameplayTags.h"
+#include "Player/BasePlayerState.h"
 
 ABaseCharacter::ABaseCharacter(const FObjectInitializer& _object_initializer)
 	:Super(_object_initializer)
@@ -14,6 +16,11 @@ void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (IsPlayableChara() == false)
+	{
+		// AI 캐릭터 ASC 설정
+		InitAbilitySystemComponent();
+	}
 }
 
 void ABaseCharacter::Tick(float _delta)
@@ -22,7 +29,43 @@ void ABaseCharacter::Tick(float _delta)
 
 }
 
+void ABaseCharacter::InitAbilitySystemComponent()
+{
+	auto tag_manager = UUtils::GetGameInstanceSubsystem<UTagManager>(this);
+	if (IsInvalid(tag_manager))
+		return;
+
+	auto ps = GetPlayerState<ABasePlayerState>();
+	if (IsValid(ps))
+	{
+		_AbilitySystemComp = ps->GetAbilitySystemComponent();
+
+		if (IsValid(_AbilitySystemComp))
+		{
+			_AbilitySystemComp->InitAbilityActorInfo(ps, this);
+
+			for (const auto& ability_pair : _DefaultAbilityMap)
+			{
+				const int32 input_id = tag_manager->FindInputID(ability_pair.Key);
+
+				_AbilitySystemComp->GiveAbility(FGameplayAbilitySpec(ability_pair.Value, 1, input_id));
+			}
+		}
+	}
+}
+
 UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
 {
 	return _AbilitySystemComp.Get();
+}
+
+bool ABaseCharacter::IsPlayableChara() const
+{
+	auto controller = GetController();
+	if (IsValid(controller))
+	{
+		return controller->IsA<APlayerController>();
+	}
+
+	return false;
 }

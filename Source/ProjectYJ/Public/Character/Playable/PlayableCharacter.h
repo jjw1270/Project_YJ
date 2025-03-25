@@ -31,7 +31,8 @@ public:
 	virtual void OnRep_PlayerState() override;
 
 protected:
-	void SendAbilityLocalInput(bool _is_pressed, EAbilityInputActionID _ability_input_id);
+	UFUNCTION()
+	void SendAbilityLocalInput(bool _is_pressed, const FGameplayTag& _tag);
 
 	void Move(const FInputActionValue& _value);
 	void Look(const FInputActionValue& _value);

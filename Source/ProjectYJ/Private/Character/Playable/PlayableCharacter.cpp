@@ -5,6 +5,7 @@
 #include "Player/BasePlayerState.h"
 #include "AbilitySystemComponent.h"
 #include "Input/ShrimpoInputComponent.h"
+#include "ShrimpoGameplayTags.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -52,10 +53,10 @@ void APlayableCharacter::SetupPlayerInputComponent(UInputComponent* _player_inpu
 	auto input_comp = Cast<UShrimpoInputComponent>(_player_input_comp);
 	if (IsAllValid(input_comp, _InputActionData))
 	{
-		input_comp->BindNativeAction(_InputActionData, ENativeInputActionID::Move, ETriggerEvent::Triggered, this, &APlayableCharacter::Move);
-		input_comp->BindNativeAction(_InputActionData, ENativeInputActionID::Look, ETriggerEvent::Triggered, this, &APlayableCharacter::Look);
+		input_comp->BindNativeAction(_InputActionData, ShrimpoGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &APlayableCharacter::Move);
+		input_comp->BindNativeAction(_InputActionData, ShrimpoGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &APlayableCharacter::Look);
 		
-		input_comp->BindAbilityAction(_InputActionData, EAbilityInputActionID::Jump, this, &APlayableCharacter::SendAbilityLocalInput);
+		input_comp->BindAbilityAction(_InputActionData, ShrimpoGameplayTags::InputTag_Jump, this, &APlayableCharacter::SendAbilityLocalInput);
 	}
 }
 
@@ -82,16 +83,7 @@ void APlayableCharacter::PossessedBy(AController* _new_controller)
 	Super::PossessedBy(_new_controller);
 
 	// 서버에서 ASC 설정
-	auto ps = GetPlayerState<ABasePlayerState>();
-	if (IsValid(ps))
-	{
-		_AbilitySystemComp = ps->GetAbilitySystemComponent();
-
-		if (IsValid(_AbilitySystemComp))
-		{
-			_AbilitySystemComp->InitAbilityActorInfo(ps, this);
-		}
-	}
+	InitAbilitySystemComponent();
 }
 
 void APlayableCharacter::OnRep_PlayerState()
@@ -99,30 +91,29 @@ void APlayableCharacter::OnRep_PlayerState()
 	Super::OnRep_PlayerState();
 
 	// 클라에서 ASC 설정
-	auto ps = GetPlayerState<ABasePlayerState>();
-	if (IsValid(ps))
-	{
-		_AbilitySystemComp = ps->GetAbilitySystemComponent();
-
-		if (IsValid(_AbilitySystemComp))
-		{
-			_AbilitySystemComp->InitAbilityActorInfo(ps, this);
-		}
-	}
+	InitAbilitySystemComponent();
 }
 
-void APlayableCharacter::SendAbilityLocalInput(bool _is_pressed, EAbilityInputActionID _ability_input_id)
+void APlayableCharacter::SendAbilityLocalInput(bool _is_pressed, const FGameplayTag& _tag)
 {
 	if (IsInvalid(_AbilitySystemComp))
 		return;
 
+	auto tag_manager = UUtils::GetGameInstanceSubsystem<UTagManager>(this);
+	if (IsInvalid(tag_manager))
+		return;
+
+	const int32 input_id = tag_manager->FindInputID(_tag);
+	if (input_id == INDEX_NONE)
+		return;
+
 	if (_is_pressed)
 	{
-		_AbilitySystemComp->AbilityLocalInputPressed((int32)_ability_input_id);
+		_AbilitySystemComp->AbilityLocalInputPressed(input_id);
 	}
 	else
 	{
-		_AbilitySystemComp->AbilityLocalInputReleased((int32)_ability_input_id);
+		_AbilitySystemComp->AbilityLocalInputReleased(input_id);
 	}
 }
 

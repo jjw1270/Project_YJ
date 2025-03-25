@@ -23,13 +23,6 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<class UCameraComponent> _CameraComp = nullptr;
 
-protected:
-	TWeakObjectPtr<class UAbilitySystemComponent> _AbilitySystemComp = nullptr;
-
-protected:
-	UPROPERTY(EditAnywhere, Category = GAS)
-	TMap<EAbilityInputActionID, TSubclassOf<class UGameplayAbility>> _DefaultInputAbilityMap;
-
 public:
 	ABaseCharacter(const FObjectInitializer& _object_initializer);
 
@@ -39,6 +32,23 @@ protected:
 public:
 	virtual void Tick(float _delta) override;
 
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const final;
 
+	UFUNCTION(BlueprintPure)
+	bool IsPlayableChara() const;
+
+#pragma region GAS
+protected:
+	TWeakObjectPtr<class UAbilitySystemComponent> _AbilitySystemComp = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = GAS)
+	TMap<FGameplayTag, TSubclassOf<class UGameplayAbility>> _DefaultAbilityMap;
+
+protected:
+	void InitAbilitySystemComponent();
+
+public:
+	UFUNCTION(BlueprintPure)
+	UAbilitySystemComponent* GetAbilitySystemComponent() const;
+
+#pragma endregion
 };
