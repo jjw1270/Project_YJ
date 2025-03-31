@@ -5,9 +5,9 @@
 #include "CoreMinimal.h"
 #include "NativeGameplayTags.h"
 #include "Subsystems/GameInstanceSubsystem.h"
-#include "ShrimpoGameplayTags.generated.h"
+#include "YJGameplayTags.generated.h"
 
-namespace ShrimpoGameplayTags
+namespace YJGameplayTags
 {
 	PROJECTYJ_API	UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_Move);
 	PROJECTYJ_API	UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputTag_Look);

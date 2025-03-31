@@ -4,8 +4,8 @@
 #include "Character/Playable/PlayableCharacter.h"
 #include "Player/BasePlayerState.h"
 #include "AbilitySystemComponent.h"
-#include "Input/ShrimpoInputComponent.h"
-#include "ShrimpoGameplayTags.h"
+#include "Input/YJInputComponent.h"
+#include "YJGameplayTags.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -43,20 +43,20 @@ APlayableCharacter::APlayableCharacter(const FObjectInitializer& _object_initial
 		mesh_comp->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
 	}
 
-	OverrideInputComponentClass = UShrimpoInputComponent::StaticClass();
+	OverrideInputComponentClass = UYJInputComponent::StaticClass();
 }
 
 void APlayableCharacter::SetupPlayerInputComponent(UInputComponent* _player_input_comp)
 {
 	Super::SetupPlayerInputComponent(_player_input_comp);
 
-	auto input_comp = Cast<UShrimpoInputComponent>(_player_input_comp);
+	auto input_comp = Cast<UYJInputComponent>(_player_input_comp);
 	if (IsAllValid(input_comp, _InputActionData))
 	{
-		input_comp->BindNativeAction(_InputActionData, ShrimpoGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &APlayableCharacter::Move);
-		input_comp->BindNativeAction(_InputActionData, ShrimpoGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &APlayableCharacter::Look);
+		input_comp->BindNativeAction(_InputActionData, YJGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &APlayableCharacter::Move);
+		input_comp->BindNativeAction(_InputActionData, YJGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &APlayableCharacter::Look);
 		
-		input_comp->BindAbilityAction(_InputActionData, ShrimpoGameplayTags::InputTag_Jump, this, &APlayableCharacter::SendAbilityLocalInput);
+		input_comp->BindAbilityAction(_InputActionData, YJGameplayTags::InputTag_Jump, this, &APlayableCharacter::SendAbilityLocalInput);
 	}
 }
 

@@ -3,7 +3,7 @@
 
 #include "Character/BaseCharacter.h"
 #include "AbilitySystemComponent.h"
-#include "ShrimpoGameplayTags.h"
+#include "YJGameplayTags.h"
 #include "Player/BasePlayerState.h"
 
 ABaseCharacter::ABaseCharacter(const FObjectInitializer& _object_initializer)

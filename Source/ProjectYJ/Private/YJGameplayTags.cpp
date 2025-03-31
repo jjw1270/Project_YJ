@@ -2,11 +2,11 @@
 
 #pragma once
 
-#include "ShrimpoGameplayTags.h"
+#include "YJGameplayTags.h"
 #include "CommonLibrary.h"
 #include "GameplayTagsSettings.h"
 
-namespace ShrimpoGameplayTags
+namespace YJGameplayTags
 {
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(InputTag_Move, "InputTag.Move", "Move input.");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(InputTag_Look, "InputTag.Look", "Look input.");

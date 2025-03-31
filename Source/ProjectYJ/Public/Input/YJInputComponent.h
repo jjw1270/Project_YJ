@@ -3,10 +3,10 @@
 #include "CommonLibrary.h"
 #include "EnhancedInputComponent.h"
 #include "Input/InputDefines.h"
-#include "ShrimpoInputComponent.generated.h"
+#include "YJInputComponent.generated.h"
 
 UCLASS()
-class UShrimpoInputComponent : public UEnhancedInputComponent
+class UYJInputComponent : public UEnhancedInputComponent
 {
 	GENERATED_BODY()
 
